@@ -28,3 +28,10 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project architecture (NutriBudget prototype)
+
+- Layering: `src/domain/models` (framework-agnostic types), `src/domain/rules` (pure business functions with Vitest tests), `src/services` (async mock services shaped like future REST endpoints), `src/mocks` (seed data), `src/state` (React hooks), `src/components/{ui,common,layout,brand,<module>}`. Why: logic must port to Angular + Spring Boot later.
+- No backend: data and the simulated session live in browser storage via services; never call storage from components directly. Why: no managed backend is approved yet.
+- Private areas `/app` and `/admin` are layout routes with `ssr: false` and a `beforeLoad` guard reading the simulated session; ADMIN area uses its own nav config. Why: the session exists only in the browser.
+- Behaviour that depends on a pending business decision must render a `ProvisionalNote`; demo prices show `EstimatedPriceNote`. Why: pending decisions must not look final.
