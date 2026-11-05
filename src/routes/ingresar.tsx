@@ -21,9 +21,10 @@ interface LoginSearch {
 }
 
 export const Route = createFileRoute("/ingresar")({
-  validateSearch: (search: Record<string, unknown>): LoginSearch => ({
-    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): LoginSearch => {
+    const value = search["redirect"];
+    return typeof value === "string" ? { redirect: value } : {};
+  },
   head: () => pageHead("Ingresar", "Ingresa a NutriBudget para planear tus comidas de la semana."),
   component: LoginPage,
 });
