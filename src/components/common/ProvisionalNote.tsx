@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 
 interface ProvisionalNoteProps {
   children: ReactNode;
-  label?: string;
-  className?: string;
+  label?: string | undefined;
+  className?: string | undefined;
 }
 
 /**
@@ -31,7 +31,7 @@ export function ProvisionalNote({ children, label = "Provisional", className }: 
 }
 
 /** Reminder that demo prices are example estimates, not real quotes. */
-export function EstimatedPriceNote({ className }: { className?: string }) {
+export function EstimatedPriceNote({ className }: { className?: string | undefined }) {
   return (
     <ProvisionalNote label="Precios de ejemplo" className={className}>
       son estimaciones de demostración, no cotizaciones reales de supermercados.

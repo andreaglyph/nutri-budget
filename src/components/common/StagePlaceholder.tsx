@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "./PageHeader";
 
 interface StagePlaceholderProps {
-  eyebrow?: string;
+  eyebrow?: string | undefined;
   title: string;
   description: string;
   stage: number;

@@ -12,7 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as IngresarRouteImport } from './routes/ingresar'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
+import { Route as RegistroRouteImport } from './routes/registro'
+import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminIngredientesRouteImport } from './routes/admin.ingredientes'
 import { Route as AdminPreciosRouteImport } from './routes/admin.precios'
@@ -47,9 +51,29 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IngresarRoute = IngresarRouteImport.update({
+  id: '/ingresar',
+  path: '/ingresar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TerminosRoute = TerminosRouteImport.update({
+  id: '/terminos',
+  path: '/terminos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -147,7 +171,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/ingresar': typeof IngresarRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/registro': typeof RegistroRoute
+  '/terminos': typeof TerminosRoute
   '/admin/ingredientes': typeof AdminIngredientesRoute
   '/admin/precios': typeof AdminPreciosRoute
   '/app/inventario': typeof AppInventarioRoute
@@ -169,7 +197,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ingresar': typeof IngresarRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/registro': typeof RegistroRoute
+  '/terminos': typeof TerminosRoute
   '/admin/ingredientes': typeof AdminIngredientesRoute
   '/admin/precios': typeof AdminPreciosRoute
   '/app/inventario': typeof AppInventarioRoute
@@ -194,7 +226,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/ingresar': typeof IngresarRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/registro': typeof RegistroRoute
+  '/terminos': typeof TerminosRoute
   '/admin/ingredientes': typeof AdminIngredientesRoute
   '/admin/precios': typeof AdminPreciosRoute
   '/app/inventario': typeof AppInventarioRoute
@@ -220,7 +256,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/app'
+    | '/ingresar'
     | '/onboarding'
+    | '/privacidad'
+    | '/registro'
+    | '/terminos'
     | '/admin/ingredientes'
     | '/admin/precios'
     | '/app/inventario'
@@ -242,7 +282,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ingresar'
     | '/onboarding'
+    | '/privacidad'
+    | '/registro'
+    | '/terminos'
     | '/admin/ingredientes'
     | '/admin/precios'
     | '/app/inventario'
@@ -266,7 +310,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/app'
+    | '/ingresar'
     | '/onboarding'
+    | '/privacidad'
+    | '/registro'
+    | '/terminos'
     | '/admin/ingredientes'
     | '/admin/precios'
     | '/app/inventario'
@@ -291,7 +339,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
+  IngresarRoute: typeof IngresarRoute
   OnboardingRoute: typeof OnboardingRoute
+  PrivacidadRoute: typeof PrivacidadRoute
+  RegistroRoute: typeof RegistroRoute
+  TerminosRoute: typeof TerminosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,11 +369,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ingresar': {
+      id: '/ingresar'
+      path: '/ingresar'
+      fullPath: '/ingresar'
+      preLoaderRoute: typeof IngresarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terminos': {
+      id: '/terminos'
+      path: '/terminos'
+      fullPath: '/terminos'
+      preLoaderRoute: typeof TerminosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -509,7 +589,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
+  IngresarRoute: IngresarRoute,
   OnboardingRoute: OnboardingRoute,
+  PrivacidadRoute: PrivacidadRoute,
+  RegistroRoute: RegistroRoute,
+  TerminosRoute: TerminosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

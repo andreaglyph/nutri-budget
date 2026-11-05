@@ -22,7 +22,7 @@ interface WorkspaceShellProps {
   children: ReactNode;
 }
 
-function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
+function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: (() => void) | undefined }) {
   const Icon = item.icon;
   return (
     <Link
@@ -37,7 +37,7 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => v
   );
 }
 
-function NavGroups({ groups, onNavigate }: { groups: NavGroup[]; onNavigate?: () => void }) {
+function NavGroups({ groups, onNavigate }: { groups: NavGroup[]; onNavigate?: (() => void) | undefined }) {
   return (
     <div className="flex flex-col gap-6">
       {groups.map((group) => (
