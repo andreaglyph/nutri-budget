@@ -13,6 +13,24 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminIngredientesRouteImport } from './routes/admin.ingredientes'
+import { Route as AdminPreciosRouteImport } from './routes/admin.precios'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppInventarioRouteImport } from './routes/app.inventario'
+import { Route as AppListaComprasRouteImport } from './routes/app.lista-compras'
+import { Route as AppPerfilRouteImport } from './routes/app.perfil'
+import { Route as AppPresupuestoRouteImport } from './routes/app.presupuesto'
+import { Route as AdminRecetasIndexRouteImport } from './routes/admin.recetas.index'
+import { Route as AdminRecetasRecipeIdRouteImport } from './routes/admin.recetas.$recipeId'
+import { Route as AppGastosIndexRouteImport } from './routes/app.gastos.index'
+import { Route as AppGastosNuevaRouteImport } from './routes/app.gastos.nueva'
+import { Route as AppHistorialIndexRouteImport } from './routes/app.historial.index'
+import { Route as AppHistorialPlanIdRouteImport } from './routes/app.historial.$planId'
+import { Route as AppPlanificadorIndexRouteImport } from './routes/app.planificador.index'
+import { Route as AppPlanificadorMealIdRouteImport } from './routes/app.planificador.$mealId'
+import { Route as AppRecetasIndexRouteImport } from './routes/app.recetas.index'
+import { Route as AppRecetasRecipeIdRouteImport } from './routes/app.recetas.$recipeId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,38 +52,245 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminIngredientesRoute = AdminIngredientesRouteImport.update({
+  id: '/ingredientes',
+  path: '/ingredientes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPreciosRoute = AdminPreciosRouteImport.update({
+  id: '/precios',
+  path: '/precios',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventarioRoute = AppInventarioRouteImport.update({
+  id: '/inventario',
+  path: '/inventario',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppListaComprasRoute = AppListaComprasRouteImport.update({
+  id: '/lista-compras',
+  path: '/lista-compras',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPerfilRoute = AppPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPresupuestoRoute = AppPresupuestoRouteImport.update({
+  id: '/presupuesto',
+  path: '/presupuesto',
+  getParentRoute: () => AppRoute,
+} as any)
+const AdminRecetasIndexRoute = AdminRecetasIndexRouteImport.update({
+  id: '/recetas/',
+  path: '/recetas/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRecetasRecipeIdRoute = AdminRecetasRecipeIdRouteImport.update({
+  id: '/recetas/$recipeId',
+  path: '/recetas/$recipeId',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AppGastosIndexRoute = AppGastosIndexRouteImport.update({
+  id: '/gastos/',
+  path: '/gastos/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGastosNuevaRoute = AppGastosNuevaRouteImport.update({
+  id: '/gastos/nueva',
+  path: '/gastos/nueva',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistorialIndexRoute = AppHistorialIndexRouteImport.update({
+  id: '/historial/',
+  path: '/historial/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistorialPlanIdRoute = AppHistorialPlanIdRouteImport.update({
+  id: '/historial/$planId',
+  path: '/historial/$planId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlanificadorIndexRoute = AppPlanificadorIndexRouteImport.update({
+  id: '/planificador/',
+  path: '/planificador/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlanificadorMealIdRoute = AppPlanificadorMealIdRouteImport.update({
+  id: '/planificador/$mealId',
+  path: '/planificador/$mealId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRecetasIndexRoute = AppRecetasIndexRouteImport.update({
+  id: '/recetas/',
+  path: '/recetas/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRecetasRecipeIdRoute = AppRecetasRecipeIdRouteImport.update({
+  id: '/recetas/$recipeId',
+  path: '/recetas/$recipeId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/admin/ingredientes': typeof AdminIngredientesRoute
+  '/admin/precios': typeof AdminPreciosRoute
+  '/app/inventario': typeof AppInventarioRoute
+  '/app/lista-compras': typeof AppListaComprasRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/presupuesto': typeof AppPresupuestoRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/admin/recetas/$recipeId': typeof AdminRecetasRecipeIdRoute
+  '/app/gastos/nueva': typeof AppGastosNuevaRoute
+  '/app/historial/$planId': typeof AppHistorialPlanIdRoute
+  '/app/planificador/$mealId': typeof AppPlanificadorMealIdRoute
+  '/app/recetas/$recipeId': typeof AppRecetasRecipeIdRoute
+  '/admin/recetas/': typeof AdminRecetasIndexRoute
+  '/app/gastos/': typeof AppGastosIndexRoute
+  '/app/historial/': typeof AppHistorialIndexRoute
+  '/app/planificador/': typeof AppPlanificadorIndexRoute
+  '/app/recetas/': typeof AppRecetasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
   '/onboarding': typeof OnboardingRoute
+  '/admin/ingredientes': typeof AdminIngredientesRoute
+  '/admin/precios': typeof AdminPreciosRoute
+  '/app/inventario': typeof AppInventarioRoute
+  '/app/lista-compras': typeof AppListaComprasRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/presupuesto': typeof AppPresupuestoRoute
+  '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
+  '/admin/recetas/$recipeId': typeof AdminRecetasRecipeIdRoute
+  '/app/gastos/nueva': typeof AppGastosNuevaRoute
+  '/app/historial/$planId': typeof AppHistorialPlanIdRoute
+  '/app/planificador/$mealId': typeof AppPlanificadorMealIdRoute
+  '/app/recetas/$recipeId': typeof AppRecetasRecipeIdRoute
+  '/admin/recetas': typeof AdminRecetasIndexRoute
+  '/app/gastos': typeof AppGastosIndexRoute
+  '/app/historial': typeof AppHistorialIndexRoute
+  '/app/planificador': typeof AppPlanificadorIndexRoute
+  '/app/recetas': typeof AppRecetasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/admin/ingredientes': typeof AdminIngredientesRoute
+  '/admin/precios': typeof AdminPreciosRoute
+  '/app/inventario': typeof AppInventarioRoute
+  '/app/lista-compras': typeof AppListaComprasRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/presupuesto': typeof AppPresupuestoRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/admin/recetas/$recipeId': typeof AdminRecetasRecipeIdRoute
+  '/app/gastos/nueva': typeof AppGastosNuevaRoute
+  '/app/historial/$planId': typeof AppHistorialPlanIdRoute
+  '/app/planificador/$mealId': typeof AppPlanificadorMealIdRoute
+  '/app/recetas/$recipeId': typeof AppRecetasRecipeIdRoute
+  '/admin/recetas/': typeof AdminRecetasIndexRoute
+  '/app/gastos/': typeof AppGastosIndexRoute
+  '/app/historial/': typeof AppHistorialIndexRoute
+  '/app/planificador/': typeof AppPlanificadorIndexRoute
+  '/app/recetas/': typeof AppRecetasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/app' | '/onboarding'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/onboarding'
+    | '/admin/ingredientes'
+    | '/admin/precios'
+    | '/app/inventario'
+    | '/app/lista-compras'
+    | '/app/perfil'
+    | '/app/presupuesto'
+    | '/admin/'
+    | '/app/'
+    | '/admin/recetas/$recipeId'
+    | '/app/gastos/nueva'
+    | '/app/historial/$planId'
+    | '/app/planificador/$mealId'
+    | '/app/recetas/$recipeId'
+    | '/admin/recetas/'
+    | '/app/gastos/'
+    | '/app/historial/'
+    | '/app/planificador/'
+    | '/app/recetas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/app' | '/onboarding'
-  id: '__root__' | '/' | '/admin' | '/app' | '/onboarding'
+  to:
+    | '/'
+    | '/onboarding'
+    | '/admin/ingredientes'
+    | '/admin/precios'
+    | '/app/inventario'
+    | '/app/lista-compras'
+    | '/app/perfil'
+    | '/app/presupuesto'
+    | '/admin'
+    | '/app'
+    | '/admin/recetas/$recipeId'
+    | '/app/gastos/nueva'
+    | '/app/historial/$planId'
+    | '/app/planificador/$mealId'
+    | '/app/recetas/$recipeId'
+    | '/admin/recetas'
+    | '/app/gastos'
+    | '/app/historial'
+    | '/app/planificador'
+    | '/app/recetas'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/onboarding'
+    | '/admin/ingredientes'
+    | '/admin/precios'
+    | '/app/inventario'
+    | '/app/lista-compras'
+    | '/app/perfil'
+    | '/app/presupuesto'
+    | '/admin/'
+    | '/app/'
+    | '/admin/recetas/$recipeId'
+    | '/app/gastos/nueva'
+    | '/app/historial/$planId'
+    | '/app/planificador/$mealId'
+    | '/app/recetas/$recipeId'
+    | '/admin/recetas/'
+    | '/app/gastos/'
+    | '/app/historial/'
+    | '/app/planificador/'
+    | '/app/recetas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
-  AppRoute: typeof AppRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
 }
 
@@ -99,13 +324,191 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ingredientes': {
+      id: '/admin/ingredientes'
+      path: '/ingredientes'
+      fullPath: '/admin/ingredientes'
+      preLoaderRoute: typeof AdminIngredientesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/precios': {
+      id: '/admin/precios'
+      path: '/precios'
+      fullPath: '/admin/precios'
+      preLoaderRoute: typeof AdminPreciosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/inventario': {
+      id: '/app/inventario'
+      path: '/inventario'
+      fullPath: '/app/inventario'
+      preLoaderRoute: typeof AppInventarioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/lista-compras': {
+      id: '/app/lista-compras'
+      path: '/lista-compras'
+      fullPath: '/app/lista-compras'
+      preLoaderRoute: typeof AppListaComprasRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/perfil': {
+      id: '/app/perfil'
+      path: '/perfil'
+      fullPath: '/app/perfil'
+      preLoaderRoute: typeof AppPerfilRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/presupuesto': {
+      id: '/app/presupuesto'
+      path: '/presupuesto'
+      fullPath: '/app/presupuesto'
+      preLoaderRoute: typeof AppPresupuestoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/admin/recetas/': {
+      id: '/admin/recetas/'
+      path: '/recetas'
+      fullPath: '/admin/recetas/'
+      preLoaderRoute: typeof AdminRecetasIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/recetas/$recipeId': {
+      id: '/admin/recetas/$recipeId'
+      path: '/recetas/$recipeId'
+      fullPath: '/admin/recetas/$recipeId'
+      preLoaderRoute: typeof AdminRecetasRecipeIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/app/gastos/': {
+      id: '/app/gastos/'
+      path: '/gastos'
+      fullPath: '/app/gastos/'
+      preLoaderRoute: typeof AppGastosIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/gastos/nueva': {
+      id: '/app/gastos/nueva'
+      path: '/gastos/nueva'
+      fullPath: '/app/gastos/nueva'
+      preLoaderRoute: typeof AppGastosNuevaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/historial/': {
+      id: '/app/historial/'
+      path: '/historial'
+      fullPath: '/app/historial/'
+      preLoaderRoute: typeof AppHistorialIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/historial/$planId': {
+      id: '/app/historial/$planId'
+      path: '/historial/$planId'
+      fullPath: '/app/historial/$planId'
+      preLoaderRoute: typeof AppHistorialPlanIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/planificador/': {
+      id: '/app/planificador/'
+      path: '/planificador'
+      fullPath: '/app/planificador/'
+      preLoaderRoute: typeof AppPlanificadorIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/planificador/$mealId': {
+      id: '/app/planificador/$mealId'
+      path: '/planificador/$mealId'
+      fullPath: '/app/planificador/$mealId'
+      preLoaderRoute: typeof AppPlanificadorMealIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/recetas/': {
+      id: '/app/recetas/'
+      path: '/recetas'
+      fullPath: '/app/recetas/'
+      preLoaderRoute: typeof AppRecetasIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/recetas/$recipeId': {
+      id: '/app/recetas/$recipeId'
+      path: '/recetas/$recipeId'
+      fullPath: '/app/recetas/$recipeId'
+      preLoaderRoute: typeof AppRecetasRecipeIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminIngredientesRoute: typeof AdminIngredientesRoute
+  AdminPreciosRoute: typeof AdminPreciosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminRecetasRecipeIdRoute: typeof AdminRecetasRecipeIdRoute
+  AdminRecetasIndexRoute: typeof AdminRecetasIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIngredientesRoute: AdminIngredientesRoute,
+  AdminPreciosRoute: AdminPreciosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminRecetasRecipeIdRoute: AdminRecetasRecipeIdRoute,
+  AdminRecetasIndexRoute: AdminRecetasIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AppRouteChildren {
+  AppInventarioRoute: typeof AppInventarioRoute
+  AppListaComprasRoute: typeof AppListaComprasRoute
+  AppPerfilRoute: typeof AppPerfilRoute
+  AppPresupuestoRoute: typeof AppPresupuestoRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppGastosNuevaRoute: typeof AppGastosNuevaRoute
+  AppHistorialPlanIdRoute: typeof AppHistorialPlanIdRoute
+  AppPlanificadorMealIdRoute: typeof AppPlanificadorMealIdRoute
+  AppRecetasRecipeIdRoute: typeof AppRecetasRecipeIdRoute
+  AppGastosIndexRoute: typeof AppGastosIndexRoute
+  AppHistorialIndexRoute: typeof AppHistorialIndexRoute
+  AppPlanificadorIndexRoute: typeof AppPlanificadorIndexRoute
+  AppRecetasIndexRoute: typeof AppRecetasIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppInventarioRoute: AppInventarioRoute,
+  AppListaComprasRoute: AppListaComprasRoute,
+  AppPerfilRoute: AppPerfilRoute,
+  AppPresupuestoRoute: AppPresupuestoRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppGastosNuevaRoute: AppGastosNuevaRoute,
+  AppHistorialPlanIdRoute: AppHistorialPlanIdRoute,
+  AppPlanificadorMealIdRoute: AppPlanificadorMealIdRoute,
+  AppRecetasRecipeIdRoute: AppRecetasRecipeIdRoute,
+  AppGastosIndexRoute: AppGastosIndexRoute,
+  AppHistorialIndexRoute: AppHistorialIndexRoute,
+  AppPlanificadorIndexRoute: AppPlanificadorIndexRoute,
+  AppRecetasIndexRoute: AppRecetasIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
-  AppRoute: AppRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
 }
 export const routeTree = rootRouteImport
