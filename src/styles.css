@@ -168,7 +168,7 @@
 @utility text-display {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(2.25rem, 4.5vw + 1rem, 4.25rem);
+  font-size: clamp(2.25rem, 3.6vw + 1rem, 3.75rem);
   line-height: 1.04;
   letter-spacing: -0.035em;
 }
