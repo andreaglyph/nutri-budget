@@ -40,7 +40,17 @@ export interface DietaryTag {
   kind: DietaryTagKind;
 }
 
+/** Hard rule: links RESTRICTION, ALLERGY or INTOLERANCE tags. Excludes recipes. */
 export interface UserDietaryRestriction {
+  userId: ID;
+  dietaryTagId: ID;
+}
+
+/**
+ * Soft rule: links PREFERENCE tags. Guides the menu but never excludes recipes.
+ * Provisional mapping — the SRS entity list may model preferences differently.
+ */
+export interface UserDietaryPreference {
   userId: ID;
   dietaryTagId: ID;
 }
@@ -208,6 +218,33 @@ export interface PurchaseItem {
   shoppingListItemId: ID | null;
   quantity: number; // base unit, may exceed need (commercial packages)
   lineTotal: number; // real amount paid
+}
+
+/* ---------- Aggregates returned by services (DTO-like) ---------- */
+export interface RecipeDetail extends Recipe {
+  mealTypes: MealType[];
+  ingredients: RecipeIngredient[];
+}
+
+export interface Catalog {
+  ingredients: Ingredient[];
+  units: Unit[];
+  prices: IngredientPrice[];
+  dietaryTags: DietaryTag[];
+  conflicts: IngredientDietConflict[];
+  recipes: RecipeDetail[];
+}
+
+export interface DietarySelection {
+  preferenceTagIds: ID[];
+  restrictionTagIds: ID[]; // RESTRICTION
+  allergyTagIds: ID[]; // ALLERGY + INTOLERANCE
+  excludedIngredientIds: ID[];
+}
+
+export interface ProfileDetails extends DietarySelection {
+  user: User;
+  profile: UserProfile;
 }
 
 /* ---------- Session (prototype only) ---------- */
