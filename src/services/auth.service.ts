@@ -1,11 +1,12 @@
-import type { Session, UserRole } from "@/domain/models";
+import type { ID, Session, UserRole } from "@/domain/models";
 import { DEMO_ACCOUNTS } from "@/mocks/users";
 
+import { newId, readDb, updateDb } from "./db";
 import { ApiError, isBrowser, simulateLatency } from "./simulated-api";
 
 /**
  * Simulated authentication (prototype only). Mirrors the future
- * POST /api/auth/login and POST /api/auth/logout endpoints.
+ * POST /api/auth/register, /login and /logout endpoints.
  * Session lives in localStorage; flash messages in sessionStorage.
  */
 const SESSION_KEY = "nb.session";
@@ -40,6 +41,29 @@ function writeSession(session: Session | null) {
   emit();
 }
 
+function sessionFor(userId: ID, startedAt = new Date().toISOString()): Session | null {
+  const db = readDb();
+  const user = db.users.find((candidate) => candidate.id === userId);
+  if (!user) return null;
+  const profile = db.profiles.find((candidate) => candidate.userId === userId);
+  return {
+    userId: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    onboardingCompleted: profile?.onboardingCompleted ?? false,
+    startedAt,
+  };
+}
+
+export interface RegisterInput {
+  name: string;
+  email: string;
+  password: string;
+  acceptTerms: boolean;
+  acceptDataProcessing: boolean;
+}
+
 export const authService = {
   getSession: readSession,
 
@@ -57,20 +81,11 @@ export const authService = {
 
   async login(email: string, password: string): Promise<Session> {
     await simulateLatency();
-    const account = DEMO_ACCOUNTS.find(
+    const credential = readDb().credentials.find(
       (candidate) => candidate.email.toLowerCase() === email.trim().toLowerCase(),
     );
-    if (!account || account.password !== password) {
-      throw new ApiError("INVALID_CREDENTIALS", "El correo o la contraseña no son correctos.");
-    }
-    const session: Session = {
-      userId: account.id,
-      name: account.name,
-      email: account.email,
-      role: account.role,
-      onboardingCompleted: account.onboardingCompleted,
-      startedAt: new Date().toISOString(),
-    };
+    const session = credential && credential.password === password ? sessionFor(credential.userId) : null;
+    if (!session) throw new ApiError("INVALID_CREDENTIALS", "El correo o la contraseña no son correctos.");
     writeSession(session);
     return session;
   },
@@ -79,6 +94,37 @@ export const authService = {
     const account = DEMO_ACCOUNTS.find((candidate) => candidate.role === role);
     if (!account) throw new ApiError("NOT_FOUND", "No hay una cuenta demo para este rol.");
     return authService.login(account.email, account.password);
+  },
+
+  /** Creates a USER account and signs it in; onboarding is still pending. */
+  async register(input: RegisterInput): Promise<Session> {
+    await simulateLatency(600);
+    if (!input.acceptTerms || !input.acceptDataProcessing) {
+      throw new ApiError("CONSENT_REQUIRED", "Debes aceptar los términos y el tratamiento de datos para crear tu cuenta.");
+    }
+    const email = input.email.trim().toLowerCase();
+    if (readDb().credentials.some((credential) => credential.email.toLowerCase() === email)) {
+      throw new ApiError("EMAIL_TAKEN", "Ya existe una cuenta con este correo. Ingresa con él o usa otro.");
+    }
+    const userId = newId("usr");
+    const now = new Date().toISOString();
+    updateDb((db) => {
+      db.users.push({ id: userId, name: input.name.trim(), email, role: "USER", termsAcceptedAt: now, dataProcessingAcceptedAt: now, createdAt: now });
+      db.credentials.push({ userId, email, password: input.password });
+      db.profiles.push({ userId, householdSize: 1, plannedMealTypes: [], onboardingCompleted: false });
+      db.dietary.push({ userId, preferenceTagIds: [], restrictionTagIds: [], allergyTagIds: [], excludedIngredientIds: [] });
+    });
+    const session = sessionFor(userId, now);
+    if (!session) throw new ApiError("UNKNOWN", "No pudimos crear tu cuenta. Intenta de nuevo.");
+    writeSession(session);
+    return session;
+  },
+
+  /** Re-reads name and onboarding state after the profile changes. */
+  refreshSession() {
+    const current = readSession();
+    if (!current) return;
+    writeSession(sessionFor(current.userId, current.startedAt));
   },
 
   logout() {
