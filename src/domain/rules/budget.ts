@@ -1,4 +1,4 @@
-import type { Budget, ISODate } from "@/domain/models";
+import type { Budget, ISODate, Purchase } from "@/domain/models";
 
 import { addDays, daysBetween, isValidISODate } from "./dates";
 
@@ -74,4 +74,17 @@ export function summarizeBudget(amount: number, spent: number): BudgetSummary {
   const ratio = amount > 0 ? spent / amount : 0;
   const status: BudgetStatus = ratio > 1 ? "OVER" : ratio >= NEAR_LIMIT_RATIO ? "NEAR_LIMIT" : "WITHIN";
   return { amount, spent, balance, percentUsed: Math.round(ratio * 1000) / 10, status };
+}
+
+/** Real spending of a budget = sum of its purchases (each purchase total = sum of line totals). */
+export function spentForBudget(purchases: readonly Pick<Purchase, "budgetId" | "total">[], budgetId: string): number {
+  return purchases.reduce((sum, purchase) => (purchase.budgetId === budgetId ? sum + purchase.total : sum), 0);
+}
+
+export type BudgetTimeline = "CURRENT" | "UPCOMING" | "PAST";
+
+export function budgetTimeline(budget: Pick<Budget, "startDate" | "endDate">, today: ISODate): BudgetTimeline {
+  if (daysBetween(today, budget.startDate) > 0) return "UPCOMING";
+  if (daysBetween(budget.endDate, today) > 0) return "PAST";
+  return "CURRENT";
 }

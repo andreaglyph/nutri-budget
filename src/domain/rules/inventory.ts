@@ -1,6 +1,6 @@
 import type { BaseUnit, ID, ISODate, UserInventory } from "@/domain/models";
 
-import { daysBetween } from "./dates";
+import { daysBetween, isValidISODate } from "./dates";
 
 /** Batches whose best-before date is this close (or past) are "por consumir pronto". */
 export const EXPIRING_SOON_DAYS = 3;
@@ -68,4 +68,64 @@ export function inventoryOverview(batches: readonly UserInventory[], today: ISOD
     else overview.depleted += 1;
   }
   return overview;
+}
+
+export interface BatchInput {
+  ingredientId: ID;
+  /** Quantity in the chosen presentation unit. */
+  quantity: number;
+  unitCode: string;
+  bestBefore: ISODate | null;
+}
+
+export type BatchValidationError = "INGREDIENT_REQUIRED" | "QUANTITY_NOT_POSITIVE" | "UNIT_INCOMPATIBLE" | "INVALID_DATE";
+
+export const BATCH_ERROR_MESSAGES: Record<BatchValidationError, string> = {
+  INGREDIENT_REQUIRED: "Elige un ingrediente.",
+  QUANTITY_NOT_POSITIVE: "La cantidad debe ser mayor que cero.",
+  UNIT_INCOMPATIBLE: "Esa unidad no corresponde al ingrediente.",
+  INVALID_DATE: "Revisa la fecha de vencimiento.",
+};
+
+export function validateBatchInput(
+  input: BatchInput,
+  ingredientBaseUnit: BaseUnit | undefined,
+  unitBase: BaseUnit | undefined,
+): BatchValidationError | null {
+  if (!input.ingredientId || !ingredientBaseUnit) return "INGREDIENT_REQUIRED";
+  if (!Number.isFinite(input.quantity) || input.quantity <= 0) return "QUANTITY_NOT_POSITIVE";
+  if (!unitBase || unitBase !== ingredientBaseUnit) return "UNIT_INCOMPATIBLE";
+  if (input.bestBefore !== null && !isValidISODate(input.bestBefore)) return "INVALID_DATE";
+  return null;
+}
+
+export interface IngredientStock<T extends UserInventory = UserInventory> {
+  ingredientId: ID;
+  /** FEFO-ordered batches. */
+  batches: T[];
+  usableQuantity: number;
+  nearestBestBefore: ISODate | null;
+}
+
+/** Groups batches per ingredient, FEFO order inside each group. */
+export function groupBatchesByIngredient(batches: readonly UserInventory[], today: ISODate): IngredientStock[] {
+  const groups = new Map<ID, UserInventory[]>();
+  for (const batch of batches) {
+    const list = groups.get(batch.ingredientId) ?? [];
+    list.push(batch);
+    groups.set(batch.ingredientId, list);
+  }
+  return [...groups.entries()].map(([ingredientId, list]) => {
+    const ordered = sortByBestBefore(list);
+    const usable = ordered.filter((batch) => {
+      const status = batchStatus(batch, today);
+      return status === "AVAILABLE" || status === "EXPIRING";
+    });
+    return {
+      ingredientId,
+      batches: ordered,
+      usableQuantity: usable.reduce((sum, batch) => sum + batch.quantity, 0),
+      nearestBestBefore: usable.find((batch) => batch.bestBefore)?.bestBefore ?? null,
+    };
+  });
 }
