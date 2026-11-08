@@ -1,4 +1,5 @@
 import { Minus, Plus, X } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { ChipGroup } from "@/components/common/ChipGroup";
 import { FieldError } from "@/components/common/FieldError";
@@ -22,7 +23,7 @@ interface ProfileFieldsProps {
 
 const mealOptions = MEAL_TYPE_ORDER.map((meal) => ({ value: meal, label: MEAL_TYPE_LABELS[meal] }));
 
-function Section({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
+function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
     <fieldset className="space-y-3">
       <legend className="font-display text-base font-bold text-foreground">{title}</legend>
