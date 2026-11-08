@@ -50,6 +50,10 @@ function LoginPage() {
 
   const goToWorkspace = (session: Session) => {
     toast.success(`Hola, ${session.name.split(" ")[0]}`, { description: "Ingresaste con una cuenta de demostración." });
+    if (!session.onboardingCompleted) {
+      navigate({ to: "/onboarding" });
+      return;
+    }
     const safeRedirect = redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : null;
     if (safeRedirect && !(safeRedirect.startsWith("/admin") && session.role !== "ADMIN")) {
       router.history.push(safeRedirect);
