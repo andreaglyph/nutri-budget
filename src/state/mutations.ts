@@ -14,7 +14,7 @@ export function useSaveBudget(userId: ID) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, input }: { id?: ID | undefined; input: BudgetInput }) =>
-      id ? budgetService.update(userId, id, input) : budgetService.create(userId, input),
+      id ? budgetService.update(userId, id, input) : budgetService.create(userId, input).then(() => undefined),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.budgets(userId) }),
   });
 }
