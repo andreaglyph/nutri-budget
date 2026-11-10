@@ -45,7 +45,7 @@ function ProfilePage() {
       queryClient.clear();
       setConfirmation(null);
       toast.success(action === "delete" ? "Cuenta eliminada en este navegador" : "Datos de demostración restaurados");
-      await navigate({ to: "/ingresar", search: { redirect: undefined } });
+      await navigate({ to: "/ingresar", search: {} });
     },
     onError: e => toast.error(e.message),
   });

@@ -16,13 +16,13 @@ import { pageHead } from "@/lib/seo";
 import { catalogQuery, inventoryQuery, profileQuery, useCatalog, useUserId } from "@/state/queries";
 
 export const Route = createFileRoute("/app/recetas/$recipeId")({
-  head: ({ loaderData }) => pageHead(loaderData?.name ?? "Receta no disponible", "Ingredientes, preparación y costo estimado para tu hogar.", { private: true }),
   loader: async ({ context, params }) => {
     const [catalog] = await Promise.all([context.queryClient.ensureQueryData(catalogQuery()), context.queryClient.ensureQueryData(profileQuery(context.session.userId)), context.queryClient.ensureQueryData(inventoryQuery(context.session.userId))]);
     const recipe = catalog.recipes.find(v => v.id === params.recipeId);
     if (!recipe) throw notFound();
     return { name: recipe.name };
   },
+  head: ({ loaderData }) => pageHead(loaderData?.name ?? "Receta no disponible", "Ingredientes, preparación y costo estimado para tu hogar.", { private: true }),
   errorComponent: QueryError, notFoundComponent: QueryNotFound,
   component: RecipePage,
 });
@@ -57,7 +57,7 @@ function RecipePage() {
       const available = stock.get(item.ingredientId) ?? 0;
       return <tr key={item.ingredientId}><th className="p-3 font-medium">{ingredient.name}</th><td className="p-3 whitespace-nowrap">{formatQuantity(item.quantity, ingredient.baseUnit)}</td><td className="p-3 whitespace-nowrap">{formatQuantity(available, ingredient.baseUnit)}</td><td className="p-3 whitespace-nowrap">{formatQuantity(Math.max(0, item.quantity - available), ingredient.baseUnit)}</td></tr>;
     })}</tbody></table></div><p className="mt-3 text-xs text-muted-foreground">No se incluyen lotes vencidos o agotados. Consultar esta receta no descuenta tu inventario.</p></section>
-    <section className="mt-8"><h2 className="font-display text-xl font-bold">Preparación</h2><ol className="mt-4 space-y-5">{recipe.steps.map((step, i) => <li key={i} className="flex gap-4"><span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft font-semibold text-primary-strong">{i + 1}</span><p className="pt-1 text-sm leading-relaxed">{step}</p></li>)}</ol></section>
+    <section className="mt-8"><h2 className="font-display text-xl font-bold">Preparación</h2><ol className="mt-4 space-y-5">{recipe.steps.map((step, i) => <li key={i} className="flex gap-4"><span className="grid size-8 shrink-0 place-items-center rounded-full bg-secondary font-semibold text-primary-strong">{i + 1}</span><p className="pt-1 text-sm leading-relaxed">{step}</p></li>)}</ol></section>
     <div className="mt-6 flex flex-wrap gap-2">{recipe.foodGroups.map(g => <Badge key={g} variant="outline">{g}</Badge>)}</div>
   </>;
 }

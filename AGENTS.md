@@ -35,3 +35,5 @@ use the editor.
 - No backend: data and the simulated session live in browser storage via services; never call storage from components directly. Why: no managed backend is approved yet.
 - Private areas `/app` and `/admin` are layout routes with `ssr: false` and a `beforeLoad` guard reading the simulated session; ADMIN area uses its own nav config. Why: the session exists only in the browser.
 - Behaviour that depends on a pending business decision must render a `ProvisionalNote`; demo prices show `EstimatedPriceNote`. Why: pending decisions must not look final.
+- Private screen reads prime TanStack Query in awaited loaders and subscribe through suspense, with shared retry and not-found views. Why: saved browser data needs consistent loading and error handling.
+- Recipe filters use validated URL search parameters. Why: filters must survive reloads and back navigation without duplicating state.

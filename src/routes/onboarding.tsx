@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Logo } from "@/components/brand/Logo";
+import { QueryError, QueryNotFound } from "@/components/common/QueryError";
 import { BudgetFields, budgetErrorField, type BudgetDraft } from "@/components/budget/BudgetFields";
 import { BatchFields, EMPTY_BATCH, draftToInput, type BatchDraft } from "@/components/inventory/BatchFields";
 import { ProfileFields } from "@/components/profile/ProfileFields";
@@ -31,11 +32,11 @@ export const Route = createFileRoute("/onboarding")({
     if (session.onboardingCompleted) throw redirect({ to: "/app" });
     return { session };
   },
-  loader: ({ context }) => {
-    context.queryClient.ensureQueryData(catalogQuery());
-    context.queryClient.ensureQueryData(profileQuery(context.session.userId));
-    context.queryClient.ensureQueryData(budgetsQuery(context.session.userId));
+  loader: async ({ context }) => {
+    await Promise.all([context.queryClient.ensureQueryData(catalogQuery()), context.queryClient.ensureQueryData(profileQuery(context.session.userId)), context.queryClient.ensureQueryData(budgetsQuery(context.session.userId))]);
   },
+  errorComponent: QueryError,
+  notFoundComponent: QueryNotFound,
   component: OnboardingPage,
 });
 

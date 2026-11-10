@@ -8,6 +8,7 @@ import { BudgetFields, budgetErrorField, type BudgetDraft } from "@/components/b
 import { BUDGET_STATUS_LABEL, BudgetSummaryCard } from "@/components/budget/BudgetSummaryCard";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageHeader } from "@/components/common/PageHeader";
+import { QueryError, QueryNotFound } from "@/components/common/QueryError";
 import { ProvisionalNote } from "@/components/common/ProvisionalNote";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,11 @@ import { budgetsQuery, purchasesQuery, useUserId } from "@/state/queries";
 
 export const Route = createFileRoute("/app/presupuesto")({
   head: () => pageHead("Mi presupuesto", "Define tu presupuesto semanal y compara lo estimado con lo gastado.", { private: true }),
-  loader: ({ context }) => {
-    context.queryClient.ensureQueryData(budgetsQuery(context.session.userId));
-    context.queryClient.ensureQueryData(purchasesQuery(context.session.userId));
+  loader: async ({ context }) => {
+    await Promise.all([context.queryClient.ensureQueryData(budgetsQuery(context.session.userId)), context.queryClient.ensureQueryData(purchasesQuery(context.session.userId))]);
   },
+  errorComponent: QueryError,
+  notFoundComponent: QueryNotFound,
   component: BudgetPage,
 });
 
