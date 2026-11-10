@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageHeader } from "@/components/common/PageHeader";
+import { QueryError, QueryNotFound } from "@/components/common/QueryError";
 import { BatchFields, EMPTY_BATCH, draftFromBatch, draftToInput, type BatchDraft } from "@/components/inventory/BatchFields";
 import { daysLabel, ExpiryBadge } from "@/components/inventory/ExpiryBadge";
 import {
@@ -36,10 +37,11 @@ import { catalogQuery, inventoryQuery, useCatalog, useUserId } from "@/state/que
 
 export const Route = createFileRoute("/app/inventario")({
   head: () => pageHead("Mi inventario", "Lotes de ingredientes en casa, ordenados por fecha de vencimiento.", { private: true }),
-  loader: ({ context }) => {
-    context.queryClient.ensureQueryData(catalogQuery());
-    context.queryClient.ensureQueryData(inventoryQuery(context.session.userId));
+  loader: async ({ context }) => {
+    await Promise.all([context.queryClient.ensureQueryData(catalogQuery()), context.queryClient.ensureQueryData(inventoryQuery(context.session.userId))]);
   },
+  errorComponent: QueryError,
+  notFoundComponent: QueryNotFound,
   component: InventoryPage,
 });
 

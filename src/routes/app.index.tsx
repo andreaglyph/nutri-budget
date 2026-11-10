@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { BudgetSummaryCard } from "@/components/budget/BudgetSummaryCard";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageHeader } from "@/components/common/PageHeader";
+import { QueryError, QueryNotFound } from "@/components/common/QueryError";
 import { ProvisionalNote } from "@/components/common/ProvisionalNote";
 import { daysLabel, ExpiryBadge } from "@/components/inventory/ExpiryBadge";
 import { Badge } from "@/components/ui/badge";
@@ -22,14 +23,18 @@ import { budgetsQuery, catalogQuery, inventoryQuery, profileQuery, purchasesQuer
 
 export const Route = createFileRoute("/app/")({
   head: () => pageHead("Dashboard", "Resumen de tu presupuesto, tus comidas, tu inventario y tus compras pendientes.", { private: true }),
-  loader: ({ context }) => {
+  loader: async ({ context }) => {
     const userId = context.session.userId;
-    context.queryClient.ensureQueryData(catalogQuery());
-    context.queryClient.ensureQueryData(profileQuery(userId));
-    context.queryClient.ensureQueryData(budgetsQuery(userId));
-    context.queryClient.ensureQueryData(purchasesQuery(userId));
-    context.queryClient.ensureQueryData(inventoryQuery(userId));
+    await Promise.all([
+      context.queryClient.ensureQueryData(catalogQuery()),
+      context.queryClient.ensureQueryData(profileQuery(userId)),
+      context.queryClient.ensureQueryData(budgetsQuery(userId)),
+      context.queryClient.ensureQueryData(purchasesQuery(userId)),
+      context.queryClient.ensureQueryData(inventoryQuery(userId)),
+    ]);
   },
+  errorComponent: QueryError,
+  notFoundComponent: QueryNotFound,
   component: DashboardPage,
 });
 
