@@ -1,6 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Search, Utensils, X } from "lucide-react";
+import { zodValidator } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageHeader } from "@/components/common/PageHeader";
 import { EstimatedPriceNote } from "@/components/common/ProvisionalNote";
@@ -17,16 +19,16 @@ import { pageHead } from "@/lib/seo";
 import { catalogQuery, profileQuery, useCatalog, useUserId } from "@/state/queries";
 
 export const Route = createFileRoute("/app/recetas/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" ? search.q : "",
-    meal: MEAL_TYPE_ORDER.includes(search.meal as MealType) ? search.meal as MealType : undefined,
-    minutes: Number(search.minutes) > 0 ? Number(search.minutes) : undefined,
-    ingredient: typeof search.ingredient === "string" ? search.ingredient : "",
-    group: typeof search.group === "string" ? search.group : "",
-    tag: typeof search.tag === "string" ? search.tag : "",
-    maxCost: Number(search.maxCost) > 0 ? Number(search.maxCost) : undefined,
-    compatible: search.compatible === true || search.compatible === "true",
-  }),
+  validateSearch: zodValidator(z.object({
+    q: z.string().catch("").default(""),
+    meal: z.enum(["BREAKFAST", "LUNCH", "DINNER"]).optional().catch(undefined),
+    minutes: z.coerce.number().positive().optional().catch(undefined),
+    ingredient: z.string().catch("").default(""),
+    group: z.string().catch("").default(""),
+    tag: z.string().catch("").default(""),
+    maxCost: z.coerce.number().positive().optional().catch(undefined),
+    compatible: z.union([z.boolean(), z.literal("true"), z.literal("false")]).transform(v => v === true || v === "true").catch(false).default(false),
+  })),
   head: () => pageHead("Recetas", "Recetas colombianas con ingredientes, tiempo y costo estimado para tu hogar.", { private: true }),
   loader: async ({ context }) => { await Promise.all([context.queryClient.ensureQueryData(catalogQuery()), context.queryClient.ensureQueryData(profileQuery(context.session.userId))]); },
   errorComponent: QueryError,
